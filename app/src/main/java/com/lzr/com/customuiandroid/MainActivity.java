@@ -38,7 +38,8 @@ public class MainActivity extends HandlerActivity {
 
     @Override
     public void initData() {
-        mLzAdapter.addData("第一个");
+        mLzAdapter.addData("learn-lib");
+        mLzAdapter.addData("release-lib");
         mLzAdapter.notifyItemChanged(mLzAdapter.getSize() - 1);
     }
 
