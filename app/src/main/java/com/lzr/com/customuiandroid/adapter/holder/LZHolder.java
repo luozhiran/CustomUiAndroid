@@ -9,7 +9,7 @@ import com.lzr.com.customuiandroid.R;
 
 public class LZHolder extends RecyclerView.ViewHolder {
 
-    private TextView mTitle;
+    public TextView mTitle;
 
     public LZHolder(View itemView) {
         super(itemView);
