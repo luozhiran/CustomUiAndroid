@@ -1,61 +1,59 @@
-package com.lzr.com.customuiandroid;
+package com.lzr.com.learn_lib;
 
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.lzr.com.control_lib.BaseActivity;
 import com.lzr.com.control_lib.HandlerActivity;
-import com.lzr.com.customuiandroid.adapter.LZAdapter;
-import com.lzr.com.learn_lib.LearnMainActivity;
+import com.lzr.com.learn_lib.learn_adapter.LearnAdapter;
+import com.lzr.com.learn_lib.uiactivity.ClockUiActivity;
 
-
-public class MainActivity extends HandlerActivity {
-
+public class LearnMainActivity extends HandlerActivity {
     private RecyclerView mRecycle;
-    private LZAdapter mLzAdapter;
+    private LearnAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_main;
+        return R.layout.activity_learn_main;
     }
 
     @Override
     public void initView() {
         mRecycle = findViewById(R.id.recycle);
-        mLzAdapter = new LZAdapter(this);
+        mAdapter = new LearnAdapter(this);
         mLayoutManager = new LinearLayoutManager(this);
         mRecycle.setLayoutManager(mLayoutManager);
         mRecycle.addItemDecoration(new LinearSpacingItem());
-        mRecycle.setAdapter(mLzAdapter);
-        mLzAdapter.setOnClickListener(v -> {
-            String str = mLzAdapter.getData((Integer) v.getTag());
+        mRecycle.setAdapter(mAdapter);
+        mAdapter.setOnClickListener(v -> {
+            String str = mAdapter.getData((Integer) v.getTag());
             switch (str) {
-                case "learn-lib":
-                    Intent intent = new Intent(this, LearnMainActivity.class);
+                case "clock":
+                    Intent intent = new Intent(this, ClockUiActivity.class);
                     startActivity(intent);
-                    break;
-                case "release-lib":
                     break;
             }
         });
     }
 
-
     @Override
     public void initData() {
-        mLzAdapter.addData("learn-lib");
-        mLzAdapter.addData("release-lib");
-        mLzAdapter.notifyDataSetChanged();
+        mAdapter.addData("clock");
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void handleMessage(Message msg) {
 
     }
+
 
     //设置recycleview的边界
     private static class LinearSpacingItem extends RecyclerView.ItemDecoration {
@@ -71,6 +69,4 @@ public class MainActivity extends HandlerActivity {
             outRect.right = 40;
         }
     }
-
-
 }

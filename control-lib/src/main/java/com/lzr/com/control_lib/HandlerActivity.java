@@ -1,10 +1,11 @@
-package com.lzr.com.customuiandroid.base;
+package com.lzr.com.control_lib;
 
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
-import com.lzr.com.customuiandroid.common.CommonHandler;
+import com.lzr.com.control_lib.common.CommonHandler;
+
 
 public abstract class HandlerActivity extends BaseActivity {
     protected CommonHandler mHandler;

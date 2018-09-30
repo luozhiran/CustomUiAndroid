@@ -1,11 +1,12 @@
-package com.lzr.com.customuiandroid.common;
+package com.lzr.com.control_lib.common;
 
 import android.os.Handler;
 import android.os.Message;
 
-import com.lzr.com.customuiandroid.base.HandlerActivity;
+import com.lzr.com.control_lib.HandlerActivity;
 
 import java.lang.ref.WeakReference;
+
 
 public class CommonHandler extends Handler {
 
