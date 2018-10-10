@@ -13,6 +13,8 @@ import com.lzr.com.control_lib.BaseActivity;
 import com.lzr.com.control_lib.HandlerActivity;
 import com.lzr.com.learn_lib.learn_adapter.LearnAdapter;
 import com.lzr.com.learn_lib.uiactivity.ClockUiActivity;
+import com.lzr.com.learn_lib.uiactivity.DrawBitmapActivity;
+import com.lzr.com.learn_lib.uiactivity.DrawUseActivity;
 
 public class LearnMainActivity extends HandlerActivity {
     private RecyclerView mRecycle;
@@ -39,6 +41,14 @@ public class LearnMainActivity extends HandlerActivity {
                     Intent intent = new Intent(this, ClockUiActivity.class);
                     startActivity(intent);
                     break;
+                case "画布使用教程":
+                     intent = new Intent(this, DrawUseActivity.class);
+                    startActivity(intent);
+                    break;
+                case "画图片":
+                    intent = new Intent(this, DrawBitmapActivity.class);
+                    startActivity(intent);
+                    break;
             }
         });
     }
@@ -46,6 +56,8 @@ public class LearnMainActivity extends HandlerActivity {
     @Override
     public void initData() {
         mAdapter.addData("clock");
+        mAdapter.addData("画布使用教程");
+        mAdapter.addData("画图片");
         mAdapter.notifyDataSetChanged();
     }
 

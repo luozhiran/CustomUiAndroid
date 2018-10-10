@@ -4,7 +4,9 @@
 
     <application>
         <activity android:name=".LearnMainActivity" />
-        <activity android:name=".uiactivity.ClockUiActivity"></activity>
+        <activity android:name=".uiactivity.ClockUiActivity" />
+        <activity android:name=".uiactivity.DrawUseActivity" />
+        <activity android:name=".uiactivity.DrawBitmapActivity"></activity>
     </application>
 
 </manifest>

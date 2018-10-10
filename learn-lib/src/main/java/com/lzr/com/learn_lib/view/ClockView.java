@@ -1,4 +1,4 @@
-package com.lzr.com.learn_lib;
+package com.lzr.com.learn_lib.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
