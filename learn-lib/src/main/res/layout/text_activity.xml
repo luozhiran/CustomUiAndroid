@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="大"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/draw"
+            android:onClick="setText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="绘制" />
+
+        <Button
+            android:id="@+id/op"
+            android:onClick="op"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="抽取骨干" />
+    </LinearLayout>
+
+    <com.lzr.com.learn_lib.view.HandWritingView
+        android:id="@+id/handwrite"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>

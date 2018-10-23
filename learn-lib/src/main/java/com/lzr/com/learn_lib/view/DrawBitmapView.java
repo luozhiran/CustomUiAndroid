@@ -9,9 +9,9 @@ import android.graphics.Rect;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.lzr.com.learn_lib.R;
+import com.lzr.com.learn_lib.view.base.BaseHandlerView;
 
 public class DrawBitmapView extends BaseHandlerView {
     private static final int ANIM_NULL = 0;         //动画状态-没有
@@ -37,7 +37,7 @@ public class DrawBitmapView extends BaseHandlerView {
 
     private void init() {
         mAnimState = ANIM_NULL;
-        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.Checkmark);
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.checkmark);
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setColor(0xffFF5317);

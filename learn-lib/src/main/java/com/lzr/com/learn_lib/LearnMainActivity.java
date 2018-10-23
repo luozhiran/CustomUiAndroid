@@ -12,9 +12,16 @@ import android.view.View;
 import com.lzr.com.control_lib.BaseActivity;
 import com.lzr.com.control_lib.HandlerActivity;
 import com.lzr.com.learn_lib.learn_adapter.LearnAdapter;
+import com.lzr.com.learn_lib.uiactivity.BezierActivity;
 import com.lzr.com.learn_lib.uiactivity.ClockUiActivity;
+import com.lzr.com.learn_lib.uiactivity.DrawAcreActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawBitmapActivity;
+import com.lzr.com.learn_lib.uiactivity.DrawLineActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawUseActivity;
+import com.lzr.com.learn_lib.uiactivity.PathMeasureActivity;
+import com.lzr.com.learn_lib.uiactivity.TextActivity;
+import com.lzr.com.learn_lib.uiactivity.TouchLineActivity;
+import com.lzr.com.learn_lib.uiactivity.WordActivity;
 
 public class LearnMainActivity extends HandlerActivity {
     private RecyclerView mRecycle;
@@ -49,6 +56,34 @@ public class LearnMainActivity extends HandlerActivity {
                     intent = new Intent(this, DrawBitmapActivity.class);
                     startActivity(intent);
                     break;
+                case "弧形练习":
+                    intent = new Intent(this, DrawAcreActivity.class);
+                    startActivity(intent);
+                    break;
+                case "路劲练习":
+                    intent = new Intent(this, DrawLineActivity.class);
+                    startActivity(intent);
+                    break;
+                case "贝塞尔曲":
+                    intent = new Intent(this, BezierActivity.class);
+                    startActivity(intent);
+                    break;
+                case "汉子描红":
+                    intent = new Intent(this, TextActivity.class);
+                    startActivity(intent);
+                    break;
+                case "汉子书写":
+                    intent = new Intent(this, WordActivity.class);
+                    startActivity(intent);
+                    break;
+                case "PathMeasure使用":
+                    intent = new Intent(this, PathMeasureActivity.class);
+                    startActivity(intent);
+                    break;
+                case "touch划线":
+                    intent = new Intent(this, TouchLineActivity.class);
+                    startActivity(intent);
+                    break;
             }
         });
     }
@@ -58,6 +93,13 @@ public class LearnMainActivity extends HandlerActivity {
         mAdapter.addData("clock");
         mAdapter.addData("画布使用教程");
         mAdapter.addData("画图片");
+        mAdapter.addData("弧形练习");
+        mAdapter.addData("路劲练习");
+        mAdapter.addData("贝塞尔曲");
+        mAdapter.addData("汉子描红");
+        mAdapter.addData("汉子书写");
+        mAdapter.addData("PathMeasure使用");
+        mAdapter.addData("touch划线");
         mAdapter.notifyDataSetChanged();
     }
 

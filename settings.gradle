@@ -1,1 +1,1 @@
-include ':app', ':learn-lib', ':release-lib', ':control-lib', ':utils-lib', ':ui-utils-lib'
+include ':app', ':learn-lib', ':release-lib', ':control-lib', ':utils-lib', ':ui-utils-lib', ':localpre-lib'

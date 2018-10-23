@@ -6,7 +6,14 @@
         <activity android:name=".LearnMainActivity" />
         <activity android:name=".uiactivity.ClockUiActivity" />
         <activity android:name=".uiactivity.DrawUseActivity" />
-        <activity android:name=".uiactivity.DrawBitmapActivity"></activity>
+        <activity android:name=".uiactivity.DrawBitmapActivity" />
+        <activity android:name=".uiactivity.DrawAcreActivity" />
+        <activity android:name=".uiactivity.DrawLineActivity" />
+        <activity android:name=".uiactivity.BezierActivity" />
+        <activity android:name=".uiactivity.TextActivity" />
+        <activity android:name=".uiactivity.WordActivity" />
+        <activity android:name=".uiactivity.PathMeasureActivity" />
+        <activity android:name=".uiactivity.TouchLineActivity"></activity>
     </application>
 
 </manifest>
