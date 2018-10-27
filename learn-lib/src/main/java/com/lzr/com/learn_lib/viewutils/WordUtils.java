@@ -1,7 +1,10 @@
 package com.lzr.com.learn_lib.viewutils;
 
 import android.content.Context;
+import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.RectF;
+import android.graphics.Region;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -108,5 +111,75 @@ public class WordUtils {
             e.printStackTrace();
         }
         return mFrame;
+    }
+
+    /**
+     * 分割List
+     *
+     * @param list       集合
+     * @param startIndex 起点
+     * @param endIndex   尾点
+     * @return 子集合
+     */
+    public static List<Point> subList(List<Point> list, int startIndex, int endIndex) {
+        List<Point> subList = new ArrayList<>();
+        if (startIndex < 0) {
+            startIndex = 0;
+        }
+        if (endIndex >= list.size()) {
+            endIndex = list.size() - 1;
+        }
+        for (int i = startIndex; i < list.size() && i < endIndex; i++) {
+            Point p = list.get(i);
+            subList.add(p);
+        }
+        //subList = list.subList(startIndex, endIndex);
+        return subList;
+    }
+    /**
+     * 将点连成线
+     *
+     * @param points 一系列点
+     * @return 路径
+     */
+    public static Path generatePathByPoint(List<Point> points,int width,int height) {
+        Path path = new Path();
+        for (int i = 0; i < points.size(); i++) {
+            Point p = points.get(i);
+            p = scalePoint(p,width,height);
+            if (i == 0) {
+                path.moveTo(p.x, p.y);
+            } else {
+                path.lineTo(p.x, p.y);
+            }
+        }
+        path.close();
+        return path;
+    }
+
+    /**
+     * 缩放原数据坐标到布局大小
+     */
+    private static Point scalePoint(Point point,int width,int height) {
+        Point p = new Point();
+        //760 是原数据默认宽高
+        p.x = (int) (point.x / (760f / width));
+        p.y = (int) (point.y / (760f / height));
+        return p;
+    }
+
+    /**
+     * 将路径转变成不规则区域
+     *
+     * @param path 路径
+     * @return 区域
+     */
+    public static Region pathToRegion(Path path) {
+        RectF bounds = new RectF();
+        bounds.setEmpty();
+        path.computeBounds(bounds, true);
+        Region region = new Region();
+        region.setPath(path, new Region((int) bounds.left, (int) bounds.top, (int) bounds.right, (int) bounds.bottom));
+        return region;
     }
 }

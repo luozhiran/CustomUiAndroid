@@ -13,7 +13,13 @@
         <activity android:name=".uiactivity.TextActivity" />
         <activity android:name=".uiactivity.WordActivity" />
         <activity android:name=".uiactivity.PathMeasureActivity" />
-        <activity android:name=".uiactivity.TouchLineActivity"></activity>
+        <activity android:name=".uiactivity.TouchLineActivity" />
+        <activity android:name=".funactivity.ForceKillActivity" />
+        <activity android:name=".uiactivity.RegionActivity" />
+        <activity android:name=".uiactivity.RegionClickActivity" />
+        <activity android:name=".uiactivity.CanvasVonvertTouchActivity" />
+        <activity android:name=".uiactivity.RemoteControlMenuActivity" />
+        <activity android:name=".uiactivity.PinYingActivity"></activity>
     </application>
 
 </manifest>

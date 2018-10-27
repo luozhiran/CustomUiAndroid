@@ -23,6 +23,7 @@ import android.view.View;
 import com.lzr.com.learn_lib.viewutils.WordUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class WordView extends View {
@@ -139,11 +140,11 @@ public class WordView extends View {
         drawCenterLine(canvas);
         canvas.drawBitmap(touchBitmap, 0, 0, mTouchPaint);
         RectF bounds = new RectF();
-        for (int i=0;i<mFrameSet.size();i++){
+        for (int i = 0; i < mFrameSet.size(); i++) {
             bounds.setEmpty();
-            mFramePaths.get(i).computeBounds(bounds,true);
+            mFramePaths.get(i).computeBounds(bounds, true);
             Region region = new Region();
-            region.setPath(mFramePaths.get(i),new Region((int)bounds.left,(int)bounds.top,(int)bounds.right,(int)bounds.bottom));
+            region.setPath(mFramePaths.get(i), new Region((int) bounds.left, (int) bounds.top, (int) bounds.right, (int) bounds.bottom));
             mRegionList.add(region);
         }
     }
@@ -188,13 +189,19 @@ public class WordView extends View {
      * 画提示线
      */
     private void drawCenterLine(Canvas canvas) {
-        canvas.drawPath(getStrokeCenterLine(0), mCenterLinePaint);
+        canvas.drawPath(getStrokeCenterLine(mCurrentDrawStroke), mCenterLinePaint);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         return super.dispatchTouchEvent(event);
     }
+
+
+    private int mCurrentDrawStroke = 0;
+    private int recordIndex = 0;
+    private HashMap<String, String> mDownDrawFinshStroke = new HashMap<>();
+    private int mValidPoint;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -207,10 +214,71 @@ public class WordView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mTouchPath.reset();
-                mTouchPath.moveTo(x,y);
+                mTouchPath.moveTo(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                mTouchPath.lineTo(x,y);
+                if (recordIndex < mFillData.get(mCurrentDrawStroke).size()&&mCurrentDrawStroke<mFillData.size()) {
+                    mTouchPath.lineTo(x, y);
+                    //目前来说，只能话points中的点
+                    //判断mTouchPath中的点要在points中
+                    List<Point> removepoints;
+                    Region region;
+                    List<Point> points;
+                    if (mFillData.get(mCurrentDrawStroke).size() - recordIndex >= 30) {
+                        mValidPoint = 10;
+                        points = WordUtils.subList(mFillData.get(mCurrentDrawStroke), recordIndex - 20, recordIndex + 30);
+                        Path drawPath = WordUtils.generatePathByPoint(points, mWidth, mHeight);
+                        region = WordUtils.pathToRegion(drawPath);
+                        removepoints = getPointInPath(mTouchPath, 30);
+                    } else {
+                        points = WordUtils.subList(mFillData.get(mCurrentDrawStroke), mFillData.get(mCurrentDrawStroke).size() - 40, mFillData.get(mCurrentDrawStroke).size());
+                        Path drawPath = WordUtils.generatePathByPoint(points, mWidth, mHeight);
+                        region = WordUtils.pathToRegion(drawPath);
+                        removepoints = getPointInPath(mTouchPath, 10);
+                        mValidPoint = 3;
+
+                    }
+                    int count = 0;
+                    for (int i = 0; i < removepoints.size(); i++) {
+                        Point point = removepoints.get(i);
+                        if (region.getBounds().contains(point.x, point.y)) {
+                            count++;
+                        }
+                    }
+                    if (count > mValidPoint) {
+                        //画触摸过的区域
+                        for (int j = 0; j < points.size() - 1; j++) {
+                            Point p = points.get(j);
+                            p = scalePoint(p);
+                            Point nextP = points.get(j + 1);
+                            nextP = scalePoint(nextP);
+                            touchCanvas.drawLine(p.x, p.y, nextP.x, nextP.y, mFillPaint);
+                            invalidate();
+                        }
+                        if (mValidPoint == 3) {
+                            if (mCurrentDrawStroke + 1 < mFillData.size()) {
+                                mCurrentDrawStroke = mCurrentDrawStroke + 1;
+                                recordIndex =0;
+                                invalidate();
+                            }
+                            mDownDrawFinshStroke.put(String.valueOf(mCurrentDrawStroke), "finish");
+                        } else if (mFillData.get(mCurrentDrawStroke).size() - recordIndex == 30 && mValidPoint == 10) {
+                            mDownDrawFinshStroke.put(String.valueOf(mCurrentDrawStroke), "finish");
+                            if (mCurrentDrawStroke + 1 < mFillData.size()) {
+                                recordIndex =0;
+                                mCurrentDrawStroke = mCurrentDrawStroke + 1;
+                                invalidate();
+                            }
+                        }else {
+                            recordIndex = recordIndex + 30;
+                        }
+
+                    }
+
+                    mTouchPath.reset();
+                    mTouchPath.moveTo(x, y);
+
+                }
 
                 break;
             case MotionEvent.ACTION_UP:
@@ -272,17 +340,58 @@ public class WordView extends View {
     /**
      * 判断当前path 在哪一个笔画中
      *
-     * @param p 路径
+     * @param p       路径
+     * @param current 当前笔画
      * @return 笔画数
      */
-    private int isInsideStroke(Path p){
-        PathMeasure measure = new PathMeasure(p,true);
-        return 0;
+    private int isInsideStroke(Path p, int current) {
+        PathMeasure measure = new PathMeasure(p, true);
+        float movePointNum = measure.getLength();
+        Region region;
+        int containCount = 0;
+        Point point;
+        region = mRegionList.get(current);
+        List<Point> points = getPointInPath(p, 40);
+        containCount = 0;
+        for (int j = 0; j < points.size(); j++) {
+            point = points.get(j);
+            if (!region.contains(point.x, point.y)) {
+                if (containCount > 20) {
+                    return current;
+                }
+            } else {
+                containCount++;
+                if (containCount > 20) {
+                    return current;
+                }
+            }
+        }
+
+        return -3;
+    }
+
+    private List<Point> getPointInPath(Path p, int step) {
+        List<Point> list = new ArrayList<>();
+        PathMeasure pathMeasure = new PathMeasure(p, false);
+        float pointNum = pathMeasure.getLength();
+        float traversalPointNum = 0f;
+        float speed = pointNum / step;//最小滑动距离
+        int counter = 0;
+        float[] acoordinates = new float[2];//点坐标集合
+        Point point;
+        while (traversalPointNum < pointNum && counter < step) {
+            pathMeasure.getPosTan(traversalPointNum, acoordinates, null);
+            point = new Point((int) acoordinates[0], (int) acoordinates[1]);
+            list.add(point);
+            counter++;
+            traversalPointNum = +speed;
+        }
+        return list;
     }
 
     private void readWordData() {
         try {
-            String assetsName = WordUtils.urlEncode('小');
+            String assetsName = WordUtils.urlEncode('伟');
             String jsonData = WordUtils.readJsonFromAssets(getContext(), assetsName);
             if (TextUtils.isEmpty(jsonData)) {
                 setVisibility(View.GONE);

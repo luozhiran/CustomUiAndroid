@@ -3,25 +3,29 @@ package com.lzr.com.learn_lib;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.lzr.com.control_lib.BaseActivity;
 import com.lzr.com.control_lib.HandlerActivity;
+import com.lzr.com.learn_lib.funactivity.ForceKillActivity;
 import com.lzr.com.learn_lib.learn_adapter.LearnAdapter;
 import com.lzr.com.learn_lib.uiactivity.BezierActivity;
+import com.lzr.com.learn_lib.uiactivity.CanvasVonvertTouchActivity;
 import com.lzr.com.learn_lib.uiactivity.ClockUiActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawAcreActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawBitmapActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawLineActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawUseActivity;
 import com.lzr.com.learn_lib.uiactivity.PathMeasureActivity;
+import com.lzr.com.learn_lib.uiactivity.PinYingActivity;
+import com.lzr.com.learn_lib.uiactivity.RegionActivity;
+import com.lzr.com.learn_lib.uiactivity.RemoteControlMenuActivity;
 import com.lzr.com.learn_lib.uiactivity.TextActivity;
 import com.lzr.com.learn_lib.uiactivity.TouchLineActivity;
+import com.lzr.com.learn_lib.uiactivity.RegionClickActivity;
 import com.lzr.com.learn_lib.uiactivity.WordActivity;
+import com.lzr.com.learn_lib.view.PingYingView;
 
 public class LearnMainActivity extends HandlerActivity {
     private RecyclerView mRecycle;
@@ -84,6 +88,30 @@ public class LearnMainActivity extends HandlerActivity {
                     intent = new Intent(this, TouchLineActivity.class);
                     startActivity(intent);
                     break;
+                case "强制杀死进程":
+                    intent = new Intent(this, ForceKillActivity.class);
+                    startActivity(intent);
+                    break;
+                case "Region类使用":
+                    intent = new Intent(this, RegionActivity.class);
+                    startActivity(intent);
+                    break;
+                case "简单事件":
+                    intent = new Intent(this, RegionClickActivity.class);
+                    startActivity(intent);
+                    break;
+                case "坐标系变换测试":
+                    intent = new Intent(this, CanvasVonvertTouchActivity.class);
+                    startActivity(intent);
+                    break;
+                case "控制菜单":
+                    intent = new Intent(this, RemoteControlMenuActivity.class);
+                    startActivity(intent);
+                    break;
+                case "文字带拼音":
+                    intent = new Intent(this, PinYingActivity.class);
+                    startActivity(intent);
+                    break;
             }
         });
     }
@@ -100,6 +128,12 @@ public class LearnMainActivity extends HandlerActivity {
         mAdapter.addData("汉子书写");
         mAdapter.addData("PathMeasure使用");
         mAdapter.addData("touch划线");
+        mAdapter.addData("强制杀死进程");
+        mAdapter.addData("Region类使用");
+        mAdapter.addData("简单事件");
+        mAdapter.addData("坐标系变换测试");
+        mAdapter.addData("控制菜单");
+        mAdapter.addData("文字带拼音");
         mAdapter.notifyDataSetChanged();
     }
 
