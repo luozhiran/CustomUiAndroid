@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.TextureView;
 import android.view.View;
 
 import com.lzr.com.learn_lib.data.RawInfo;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PingYingView extends View {
+public class PingYinView extends View {
 
     private Paint mPaint;
     private float mDenity;
@@ -33,12 +32,13 @@ public class PingYingView extends View {
     private List<WordInfo> mWordInfoList;
     private int mScreenHeight;
     private int mToolBarHeight=0;
+    private List<WordInfo> mPinyinWordInfoList;
 
-    public PingYingView(Context context) {
+    public PingYinView(Context context) {
         this(context, null);
     }
 
-    public PingYingView(Context context, @Nullable AttributeSet attrs) {
+    public PingYinView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -49,10 +49,11 @@ public class PingYingView extends View {
         mPaint = new Paint();
         mPaint.setColor(Color.GRAY);
         mPaint.setStrokeWidth(mDenity);
-        mPaint.setTextSize(40);
+        mPaint.setTextSize(60);
         mFontMetrics = mPaint.getFontMetrics();
         mChineseCoordinate = new ArrayList<>();
         mPinyinCoordinate = new ArrayList<>();
+        mPinyinWordInfoList = new ArrayList<>();
         mWordInfoList = new ArrayList<>();
         if (mToolBarHeight ==0) {
             mToolBarHeight = getStatusBarHeight(getContext());
@@ -80,7 +81,6 @@ public class PingYingView extends View {
             case MeasureSpec.UNSPECIFIED:
                 break;
         }
-//         height = (int) generatingCoordinate();
            height= (int) generatingPinYinCoordinate();
 
         switch (heightMode) {
@@ -112,12 +112,10 @@ public class PingYingView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int i = 0;
-//        for (Point point : mChineseCoordinate) {
-//            canvas.drawText(mChineseList.get(i), point.x, point.y, mPaint);
-//            i++;
-//        }
         for (Point point : mPinyinCoordinate) {
-            canvas.drawText(mYinBiaoList.get(i), point.x, point.y, mPaint);
+            if (!TextUtils.isEmpty(mYinBiaoList.get(i).trim())) {
+                canvas.drawText(mYinBiaoList.get(i), point.x, point.y, mPaint);
+            }
             i++;
         }
     }
@@ -136,11 +134,18 @@ public class PingYingView extends View {
         mChineseList = getStringArray(text);
     }
 
+
     public void setYinBiao(String yinbiao, String spiteRegular) {
         if (!TextUtils.isEmpty(yinbiao)) {
             String[] splitResult = yinbiao.split(spiteRegular);
+            mYinBiaoList = new ArrayList<>();
             if (splitResult != null && splitResult.length > 0) {
-                mYinBiaoList = Arrays.asList(splitResult);
+                for (String s : splitResult) {
+                    if (!TextUtils.isEmpty(s)) {
+                        mPinyinWordInfoList.add(getFontMetrics(s));
+                        mYinBiaoList.add(s);
+                    }
+                }
             }
         }
     }
@@ -150,50 +155,36 @@ public class PingYingView extends View {
         if (mYinBiaoList != null && !mYinBiaoList.isEmpty()) {
             mPinyinCoordinate.clear();
             //计算每个文字坐标
-            Point point = null;
-            float xCoordinate = 0;
-            float yCoordinate = 0;
-            WordInfo info;
-            int i=0;
-            for (String word:mYinBiaoList) {
-                if (!TextUtils.isEmpty(word)) {
-                    point = new Point();
-                    info = getFontMetrics(word);
-                    if (word.equals("wéw")){
-                        Log.e("dd","dd");
-                    }
-                    if (word.equals("xiǎoi")){
-                        Log.e("dd","dd");
-                    }
-                    info.space = 10;
-                    if (i == 0) {
-                        xCoordinate = getPaddingLeft();
-                        yCoordinate = getPaddingTop() + info.baseLine;
-                        point.x = (int) xCoordinate;
-                        point.y = (int) yCoordinate;
-                        xCoordinate = xCoordinate + info.width + info.space;
-                    } else {
-                        if (xCoordinate > mViewWidth - getPaddingRight() - getPaddingLeft()) {//文字排版大于view宽度时，对文字进行换行
-                            yCoordinate = yCoordinate + info.height;
-                            point.y = (int) yCoordinate;
-                            xCoordinate = getPaddingLeft();
-                            point.x = (int) xCoordinate;
-                            xCoordinate = xCoordinate + info.width + info.space;
-                        } else {
-                            point.x = (int) xCoordinate;
-                            point.y = (int) yCoordinate;
-                            xCoordinate = xCoordinate + info.width + info.space;
-                        }
+            Point pinyinPoint = null;
+            float xPinyinCoordinate = 0;
+            float yPinyinCoordinate = 0;
+            for (int i=0;i<mYinBiaoList.size();i++){
+                pinyinPoint = new Point();
+                if (i == 0){
+                    xPinyinCoordinate = getPaddingLeft();
+                    yPinyinCoordinate = getPaddingTop()+mPinyinWordInfoList.get(i).baseLine;
+                    pinyinPoint.x = (int) xPinyinCoordinate;
+                    pinyinPoint.y = (int) yPinyinCoordinate;
+                    xPinyinCoordinate = xPinyinCoordinate+mPinyinWordInfoList.get(i).width+10;
+                }else {
 
-                    }
-                    if (i == mYinBiaoList.size()-1){
-                        xCoordinate = yCoordinate - info.height;
-                    }
-                    mPinyinCoordinate.add(point);
+                if (xPinyinCoordinate+mPinyinWordInfoList.get(i).width>mViewWidth - getPaddingRight() - getPaddingLeft()){
+                    yPinyinCoordinate = yPinyinCoordinate +mPinyinWordInfoList.get(i).height;
+                    pinyinPoint.y = (int) yPinyinCoordinate;
+                    xPinyinCoordinate = getPaddingLeft();
+                    pinyinPoint.x = (int) xPinyinCoordinate;
+                    xPinyinCoordinate = xPinyinCoordinate+mPinyinWordInfoList.get(i).width+10;
+                }else {
+                    pinyinPoint.x = (int) xPinyinCoordinate;
+                    pinyinPoint.y = (int) yPinyinCoordinate;
+                    xPinyinCoordinate = xPinyinCoordinate+mPinyinWordInfoList.get(i).width+10;
                 }
-                i++;
+                }
+                mPinyinCoordinate.add(pinyinPoint);
             }
-            return Math.max(yCoordinate, mScreenHeight-mToolBarHeight);
+
+
+            return Math.max(yPinyinCoordinate, mScreenHeight-mToolBarHeight);
         }
         return mScreenHeight-mToolBarHeight;
     }

@@ -17,15 +17,17 @@ import com.lzr.com.learn_lib.uiactivity.DrawAcreActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawBitmapActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawLineActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawUseActivity;
+import com.lzr.com.learn_lib.uiactivity.OnlyHanziActivity;
+import com.lzr.com.learn_lib.uiactivity.OnlyPingyinActivity;
 import com.lzr.com.learn_lib.uiactivity.PathMeasureActivity;
-import com.lzr.com.learn_lib.uiactivity.PinYingActivity;
+import com.lzr.com.learn_lib.uiactivity.PinYinAndHanziActivity;
 import com.lzr.com.learn_lib.uiactivity.RegionActivity;
 import com.lzr.com.learn_lib.uiactivity.RemoteControlMenuActivity;
 import com.lzr.com.learn_lib.uiactivity.TextActivity;
+import com.lzr.com.learn_lib.uiactivity.TextFlickerActivity;
 import com.lzr.com.learn_lib.uiactivity.TouchLineActivity;
 import com.lzr.com.learn_lib.uiactivity.RegionClickActivity;
 import com.lzr.com.learn_lib.uiactivity.WordActivity;
-import com.lzr.com.learn_lib.view.PingYingView;
 
 public class LearnMainActivity extends HandlerActivity {
     private RecyclerView mRecycle;
@@ -108,10 +110,23 @@ public class LearnMainActivity extends HandlerActivity {
                     intent = new Intent(this, RemoteControlMenuActivity.class);
                     startActivity(intent);
                     break;
-                case "文字带拼音":
-                    intent = new Intent(this, PinYingActivity.class);
+                case "文字闪烁":
+                    intent = new Intent(this, TextFlickerActivity.class);
                     startActivity(intent);
                     break;
+                case "汉子排版":
+                    intent = new Intent(this, OnlyHanziActivity.class);
+                    startActivity(intent);
+                    break;
+                case "拼音排版":
+                    intent = new Intent(this, OnlyPingyinActivity.class);
+                    startActivity(intent);
+                    break;
+                case "文字带拼音":
+                    intent = new Intent(this, PinYinAndHanziActivity.class);
+                    startActivity(intent);
+                    break;
+
             }
         });
     }
@@ -133,6 +148,9 @@ public class LearnMainActivity extends HandlerActivity {
         mAdapter.addData("简单事件");
         mAdapter.addData("坐标系变换测试");
         mAdapter.addData("控制菜单");
+        mAdapter.addData("文字闪烁");
+        mAdapter.addData("汉子排版");
+        mAdapter.addData("拼音排版");
         mAdapter.addData("文字带拼音");
         mAdapter.notifyDataSetChanged();
     }

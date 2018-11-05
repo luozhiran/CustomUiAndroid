@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".uiactivity.PinYinAndHanziActivity">
-
+    tools:context=".uiactivity.OnlyPingyinActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.lzr.com.learn_lib.view.PingYinAndHanziView
+        <com.lzr.com.learn_lib.view.PingYinView
             android:id="@+id/pinying"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

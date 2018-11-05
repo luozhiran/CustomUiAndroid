@@ -157,6 +157,30 @@ public class WordUtils {
         return path;
     }
 
+
+    /**
+     * 将点连成线
+     *
+     * @param points 一系列点
+     * @return 路径
+     */
+    public static Path generateScalePathByPoint(List<Point> points,int width,int height) {
+        Path path = new Path();
+        for (int i = 0; i < points.size(); i++) {
+            Point p = points.get(i);
+            p = scalePoint(p,width,height);
+            if (i == 0) {
+                path.moveTo(p.x-20, p.y-20);
+            } else {
+                path.lineTo(p.x-20, p.y-20);
+                path.lineTo(p.x, p.y);
+                path.lineTo(p.x+20, p.y+20);
+            }
+        }
+        path.close();
+        return path;
+    }
+
     /**
      * 缩放原数据坐标到布局大小
      */

@@ -49,6 +49,7 @@ public class WordView extends View {
     private List<Path> mFramePaths = new ArrayList<>();
     //触摸点
     private float touchX, touchY;
+    private int mTouchPoint = 30;
 
     public WordView(Context context) {
         this(context, null);
@@ -123,8 +124,7 @@ public class WordView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = mHeight = Math.min(w, h);
-//        mWidth = w;
-//        mHeight = h;
+
     }
 
     @Override
@@ -227,12 +227,12 @@ public class WordView extends View {
                     if (mFillData.get(mCurrentDrawStroke).size() - recordIndex >= 30) {
                         mValidPoint = 10;
                         points = WordUtils.subList(mFillData.get(mCurrentDrawStroke), recordIndex - 20, recordIndex + 30);
-                        Path drawPath = WordUtils.generatePathByPoint(points, mWidth, mHeight);
+                        Path drawPath = WordUtils.generateScalePathByPoint(points, mWidth, mHeight);
                         region = WordUtils.pathToRegion(drawPath);
                         removepoints = getPointInPath(mTouchPath, 30);
                     } else {
                         points = WordUtils.subList(mFillData.get(mCurrentDrawStroke), mFillData.get(mCurrentDrawStroke).size() - 40, mFillData.get(mCurrentDrawStroke).size());
-                        Path drawPath = WordUtils.generatePathByPoint(points, mWidth, mHeight);
+                        Path drawPath = WordUtils.generateScalePathByPoint(points, mWidth, mHeight);
                         region = WordUtils.pathToRegion(drawPath);
                         removepoints = getPointInPath(mTouchPath, 10);
                         mValidPoint = 3;

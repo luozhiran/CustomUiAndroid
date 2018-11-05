@@ -19,7 +19,10 @@
         <activity android:name=".uiactivity.RegionClickActivity" />
         <activity android:name=".uiactivity.CanvasVonvertTouchActivity" />
         <activity android:name=".uiactivity.RemoteControlMenuActivity" />
-        <activity android:name=".uiactivity.PinYingActivity"></activity>
+        <activity android:name=".uiactivity.PinYinAndHanziActivity" />
+        <activity android:name=".uiactivity.TextFlickerActivity" />
+        <activity android:name=".uiactivity.OnlyHanziActivity" />
+        <activity android:name=".uiactivity.OnlyPingyinActivity"></activity>
     </application>
 
 </manifest>
