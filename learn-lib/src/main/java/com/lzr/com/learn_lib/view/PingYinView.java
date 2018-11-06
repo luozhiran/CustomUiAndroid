@@ -33,7 +33,7 @@ public class PingYinView extends View {
     private int mScreenHeight;
     private int mToolBarHeight=0;
     private List<WordInfo> mPinyinWordInfoList;
-
+    private int mPinyinSpace = 20;
     public PingYinView(Context context) {
         this(context, null);
     }

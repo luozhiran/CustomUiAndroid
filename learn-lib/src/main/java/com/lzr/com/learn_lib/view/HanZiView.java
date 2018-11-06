@@ -9,10 +9,14 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
+import com.lzr.com.learn_lib.data.HorizontalWordRegion;
 import com.lzr.com.learn_lib.data.RawInfo;
+import com.lzr.com.learn_lib.data.VerticalWordRegion;
 import com.lzr.com.learn_lib.data.WordInfo;
 
 import java.util.ArrayList;
@@ -26,12 +30,15 @@ public class HanZiView extends View {
     private Paint.FontMetrics mFontMetrics;
     private int mViewHeight, mViewWidth;
     private List<String> mChineseList;
-    private List<String> mYinBiaoList;
     private List<Point> mChineseCoordinate;
     private List<WordInfo> mWordInfoList;
     private int mScreenHeight;
     private int mToolBarHeight=0;
     private List<WordInfo> mHanziWordInfoList;
+    private List<VerticalWordRegion> mColYRange;
+    private SparseArray<List<HorizontalWordRegion>> mLineXRange;
+
+    private int mHanziSpace = 10;
     public HanZiView(Context context) {
         this(context, null);
     }
@@ -51,6 +58,8 @@ public class HanZiView extends View {
         mFontMetrics = mPaint.getFontMetrics();
         mChineseCoordinate = new ArrayList<>();
         mWordInfoList = new ArrayList<>();
+        mColYRange = new ArrayList<>();//行数据
+        mLineXRange = new SparseArray<>();//列数据
         mHanziWordInfoList = new ArrayList<>();
         if (mToolBarHeight ==0) {
             mToolBarHeight = getStatusBarHeight(getContext());
@@ -107,11 +116,28 @@ public class HanZiView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int i = 0;
-        for (Point point : mChineseCoordinate) {
-            canvas.drawText(mChineseList.get(i), point.x, point.y, mPaint);
-            i++;
+        int line = 1;
+        int index = 0;
+        List<HorizontalWordRegion> list = mLineXRange.get(line);
+        int count = list.size();
+        HorizontalWordRegion horizontalWordRegion = null;
+        for (int i=0;i<mChineseCoordinate.size();i++){
+            if (index < count) {
+                horizontalWordRegion = list.get(index);
+                horizontalWordRegion.word = mChineseList.get(i);
+                index++;
+                if (index == count) {
+                    line++;
+                    index = 0;
+                    list = mLineXRange.get(line);
+                    if (list!=null) {
+                        count = list.size();
+                    }
+                }
+            }
+            canvas.drawText(mChineseList.get(i), mChineseCoordinate.get(i).x, mChineseCoordinate.get(i).y, mPaint);
         }
+
     }
 
     @Override
@@ -121,23 +147,48 @@ public class HanZiView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX(), y = event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                int lineNum = getColNum(event.getY());
+                if (lineNum != -1) {
+                    HorizontalWordRegion region = getLineNum(lineNum, event.getX());
+                    if (region != null) {
+                        Toast.makeText(getContext(), lineNum + "行" + region.lineNum + "列"+" "+region.word, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "" + lineNum, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+        }
         return super.onTouchEvent(event);
+    }
+
+    public HorizontalWordRegion getLineNum(int colNum, float x) {
+        List<HorizontalWordRegion> list = mLineXRange.get(colNum);
+        for (HorizontalWordRegion hr : list) {
+            if (hr.leftRange <= x && x <= hr.rightRange) {
+                return hr;
+            }
+        }
+        return null;
+    }
+    public int getColNum(float y) {
+        for (VerticalWordRegion re : mColYRange) {
+            if (re.topRange <= y && y <= re.bottomRange) {
+                return re.colNum;
+            }
+        }
+        return -1;
     }
 
     public void setText(String text) {
         mChineseList = getStringArray(text);
     }
-
-    public void setYinBiao(String yinbiao, String spiteRegular) {
-        if (!TextUtils.isEmpty(yinbiao)) {
-            String[] splitResult = yinbiao.split(spiteRegular);
-            if (splitResult != null && splitResult.length > 0) {
-                mYinBiaoList = Arrays.asList(splitResult);
-            }
-        }
-    }
-
-
 
     private float generatingCoordinate() {
         //判断拼音和汉子是否相等
@@ -145,26 +196,72 @@ public class HanZiView extends View {
         Point hanziPoint = null;
         float xHanziCoordinate = 0;
         float yHanziCoordinate = 0;
+        mColYRange.clear();
+        mLineXRange.clear();
         mChineseCoordinate.clear();
+        List<HorizontalWordRegion> horizontalWordRegionList = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             hanziPoint = new Point();
             if (i == 0) {
+                HorizontalWordRegion horizontalWordRegion = new HorizontalWordRegion();
+                VerticalWordRegion rangeRegion = new VerticalWordRegion();
+                rangeRegion.topRange = getPaddingTop();
+                //汉子坐标
                 xHanziCoordinate = getPaddingLeft();
                 yHanziCoordinate = getPaddingTop() + mHanziWordInfoList.get(i).baseLine;
                 hanziPoint.x = (int) xHanziCoordinate;
                 hanziPoint.y = (int) yHanziCoordinate;
-                xHanziCoordinate = xHanziCoordinate + mHanziWordInfoList.get(i).width ;
+                xHanziCoordinate = xHanziCoordinate + mHanziWordInfoList.get(i).width + mHanziSpace;
+
+                //记录列坐标
+                horizontalWordRegion.leftRange = hanziPoint.x;
+                horizontalWordRegion.rightRange = xHanziCoordinate;
+                horizontalWordRegion.lineNum = 1;
+                horizontalWordRegionList.add(horizontalWordRegion);
+                mLineXRange.put(1, horizontalWordRegionList);
+                // 记录行坐标
+                rangeRegion.bottomRange = rangeRegion.topRange +mHanziWordInfoList.get(i).height;
+                rangeRegion.colNum = 1;
+                mColYRange.add(rangeRegion);
             } else {
                 if (xHanziCoordinate +mHanziWordInfoList.get(i).width> mViewWidth - getPaddingRight() - getPaddingLeft()) {
+                    horizontalWordRegionList = new ArrayList<>();//生成第二行
+                    HorizontalWordRegion horizontalWordRegion = new HorizontalWordRegion();
+                    VerticalWordRegion rangeRegion = new VerticalWordRegion();
+                    //汉子坐标
+                    rangeRegion.topRange = mColYRange.get(mColYRange.size() - 1).bottomRange;
                     yHanziCoordinate = yHanziCoordinate + mHanziWordInfoList.get(i).height;
                     hanziPoint.y = (int) yHanziCoordinate;
                     xHanziCoordinate = getPaddingLeft();
                     hanziPoint.x = (int) xHanziCoordinate;
-                    xHanziCoordinate = xHanziCoordinate + mHanziWordInfoList.get(i).width ;
+                    xHanziCoordinate = xHanziCoordinate + mHanziWordInfoList.get(i).width + mHanziSpace;
+                    //记录列坐标
+                    horizontalWordRegion.leftRange = hanziPoint.x;
+                    horizontalWordRegion.rightRange = xHanziCoordinate;
+                    horizontalWordRegion.lineNum = 1;
+                    horizontalWordRegionList.add(horizontalWordRegion);
+                    mLineXRange.put(mLineXRange.size() + 1, horizontalWordRegionList);
+                    //记录行坐标
+                    rangeRegion.bottomRange = rangeRegion.topRange + mHanziWordInfoList.get(i).height ;
+                    rangeRegion.colNum = mColYRange.size() + 1;
+                    mColYRange.add(rangeRegion);
                 } else {
+                    VerticalWordRegion rangeRegion = new VerticalWordRegion();
+                    rangeRegion.topRange = yHanziCoordinate;
+                    //汉子坐标
                     hanziPoint.x = (int) xHanziCoordinate;
                     hanziPoint.y = (int) yHanziCoordinate;
-                    xHanziCoordinate = xHanziCoordinate + mHanziWordInfoList.get(i).width ;
+                    xHanziCoordinate = xHanziCoordinate + mHanziWordInfoList.get(i).width + mHanziSpace ;
+                    //记录列坐标
+                    HorizontalWordRegion horizontalWordRegion = new HorizontalWordRegion();
+                    horizontalWordRegion.lineNum = horizontalWordRegionList.size() + 1;
+                    horizontalWordRegion.leftRange = hanziPoint.x;
+                    horizontalWordRegion.rightRange = xHanziCoordinate;
+                    horizontalWordRegionList.add(horizontalWordRegion);
+                    //记录行坐标
+                    rangeRegion.bottomRange = rangeRegion.topRange +mHanziWordInfoList.get(i).height;
+                    rangeRegion.colNum = mColYRange.size() + 1;
+                    mColYRange.add(rangeRegion);
                 }
             }
 
