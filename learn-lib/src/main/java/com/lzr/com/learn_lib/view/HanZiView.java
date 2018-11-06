@@ -258,10 +258,6 @@ public class HanZiView extends View {
                     horizontalWordRegion.leftRange = hanziPoint.x;
                     horizontalWordRegion.rightRange = xHanziCoordinate;
                     horizontalWordRegionList.add(horizontalWordRegion);
-                    //记录行坐标
-                    rangeRegion.bottomRange = rangeRegion.topRange +mHanziWordInfoList.get(i).height;
-                    rangeRegion.colNum = mColYRange.size() + 1;
-                    mColYRange.add(rangeRegion);
                 }
             }
 

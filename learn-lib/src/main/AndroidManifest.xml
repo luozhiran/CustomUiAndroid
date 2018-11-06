@@ -22,7 +22,8 @@
         <activity android:name=".uiactivity.PinYinAndHanziActivity" />
         <activity android:name=".uiactivity.TextFlickerActivity" />
         <activity android:name=".uiactivity.OnlyHanziActivity" />
-        <activity android:name=".uiactivity.OnlyPingyinActivity"></activity>
+        <activity android:name=".uiactivity.OnlyPingyinActivity" />
+        <activity android:name=".uiactivity.CustomPinYinAndHanziActivity"></activity>
     </application>
 
 </manifest>

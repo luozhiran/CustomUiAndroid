@@ -13,6 +13,7 @@ import com.lzr.com.learn_lib.learn_adapter.LearnAdapter;
 import com.lzr.com.learn_lib.uiactivity.BezierActivity;
 import com.lzr.com.learn_lib.uiactivity.CanvasVonvertTouchActivity;
 import com.lzr.com.learn_lib.uiactivity.ClockUiActivity;
+import com.lzr.com.learn_lib.uiactivity.CustomPinYinAndHanziActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawAcreActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawBitmapActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawLineActivity;
@@ -122,8 +123,12 @@ public class LearnMainActivity extends HandlerActivity {
                     intent = new Intent(this, OnlyPingyinActivity.class);
                     startActivity(intent);
                     break;
-                case "文字带拼音":
+                case "文字带拼音(带声调)":
                     intent = new Intent(this, PinYinAndHanziActivity.class);
+                    startActivity(intent);
+                    break;
+                case "文字带拼音(自己画声调)":
+                    intent = new Intent(this, CustomPinYinAndHanziActivity.class);
                     startActivity(intent);
                     break;
 
@@ -151,7 +156,8 @@ public class LearnMainActivity extends HandlerActivity {
         mAdapter.addData("文字闪烁");
         mAdapter.addData("汉子排版");
         mAdapter.addData("拼音排版");
-        mAdapter.addData("文字带拼音");
+        mAdapter.addData("文字带拼音(带声调)");
+        mAdapter.addData("文字带拼音(自己画声调)");
         mAdapter.notifyDataSetChanged();
     }
 
