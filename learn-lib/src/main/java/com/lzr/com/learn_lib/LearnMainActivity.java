@@ -18,6 +18,7 @@ import com.lzr.com.learn_lib.uiactivity.DrawAcreActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawBitmapActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawLineActivity;
 import com.lzr.com.learn_lib.uiactivity.DrawUseActivity;
+import com.lzr.com.learn_lib.uiactivity.MeasureViewActivity;
 import com.lzr.com.learn_lib.uiactivity.OnlyHanziActivity;
 import com.lzr.com.learn_lib.uiactivity.OnlyPingyinActivity;
 import com.lzr.com.learn_lib.uiactivity.PathMeasureActivity;
@@ -51,8 +52,12 @@ public class LearnMainActivity extends HandlerActivity {
         mAdapter.setOnClickListener(v -> {
             String str = mAdapter.getData((Integer) v.getTag());
             switch (str) {
+                case "测量控件大小":
+                    Intent intent = new Intent(this, MeasureViewActivity.class);
+                    startActivity(intent);
+                    break;
                 case "clock":
-                    Intent intent = new Intent(this, ClockUiActivity.class);
+                    intent = new Intent(this, ClockUiActivity.class);
                     startActivity(intent);
                     break;
                 case "画布使用教程":
@@ -138,6 +143,7 @@ public class LearnMainActivity extends HandlerActivity {
 
     @Override
     public void initData() {
+        mAdapter.addData("测量控件大小");
         mAdapter.addData("clock");
         mAdapter.addData("画布使用教程");
         mAdapter.addData("画图片");

@@ -51,6 +51,8 @@ public class WordView extends View {
     private float touchX, touchY;
     private int mTouchPoint = 30;
 
+    private int mFingerState;
+    private boolean mIsFirstCreateView;
     public WordView(Context context) {
         this(context, null);
     }
@@ -58,6 +60,7 @@ public class WordView extends View {
     public WordView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+        mIsFirstCreateView = true;
     }
 
 
@@ -137,7 +140,14 @@ public class WordView extends View {
         super.onDraw(canvas);
         drawGrid(canvas);
         drawWord(canvas);
-        drawCenterLine(canvas);
+        if (mFingerState == MotionEvent.ACTION_UP||mIsFirstCreateView) {
+            mIsFirstCreateView = false;
+            drawCenterLine(canvas);
+        }else {
+            if (mShowDrawStroke==mCurrentDrawStroke){
+                drawCenterLine(canvas);
+            }
+        }
         canvas.drawBitmap(touchBitmap, 0, 0, mTouchPaint);
         RectF bounds = new RectF();
         for (int i = 0; i < mFrameSet.size(); i++) {
@@ -189,6 +199,7 @@ public class WordView extends View {
      * 画提示线
      */
     private void drawCenterLine(Canvas canvas) {
+        mShowDrawStroke = mCurrentDrawStroke;
         canvas.drawPath(getStrokeCenterLine(mCurrentDrawStroke), mCenterLinePaint);
     }
 
@@ -199,6 +210,7 @@ public class WordView extends View {
 
 
     private int mCurrentDrawStroke = 0;
+    private int mShowDrawStroke = 0;
     private int recordIndex = 0;
     private HashMap<String, String> mDownDrawFinshStroke = new HashMap<>();
     private int mValidPoint;
@@ -213,10 +225,12 @@ public class WordView extends View {
         Log.e("ontouch", "how touch " + event.getAction() + " ,x =" + event.getX() + ",y= " + event.getY());
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                mFingerState = MotionEvent.ACTION_DOWN;
                 mTouchPath.reset();
                 mTouchPath.moveTo(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
+                mFingerState = MotionEvent.ACTION_MOVE;
                 if (recordIndex < mFillData.get(mCurrentDrawStroke).size()&&mCurrentDrawStroke<mFillData.size()) {
                     mTouchPath.lineTo(x, y);
                     //目前来说，只能话points中的点
@@ -235,7 +249,7 @@ public class WordView extends View {
                         Path drawPath = WordUtils.generateScalePathByPoint(points, mWidth, mHeight);
                         region = WordUtils.pathToRegion(drawPath);
                         removepoints = getPointInPath(mTouchPath, 10);
-                        mValidPoint = 3;
+                        mValidPoint = 1;
 
                     }
                     int count = 0;
@@ -255,7 +269,7 @@ public class WordView extends View {
                             touchCanvas.drawLine(p.x, p.y, nextP.x, nextP.y, mFillPaint);
                             invalidate();
                         }
-                        if (mValidPoint == 3) {
+                        if (mValidPoint == 1) {
                             if (mCurrentDrawStroke + 1 < mFillData.size()) {
                                 mCurrentDrawStroke = mCurrentDrawStroke + 1;
                                 recordIndex =0;
@@ -282,6 +296,8 @@ public class WordView extends View {
 
                 break;
             case MotionEvent.ACTION_UP:
+                mFingerState = MotionEvent.ACTION_UP;
+                invalidate();
                 break;
         }
         return true;

@@ -10,5 +10,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         UnDeadBag.getInstance().ResourcesDensityData = UISizeUtils.getScreenDensity_ByResources(this);
+        UnDeadBag.getInstance().statusBarHeight = UISizeUtils.getStatusBarHeight(this);
     }
 }

@@ -170,11 +170,11 @@ public class WordUtils {
             Point p = points.get(i);
             p = scalePoint(p,width,height);
             if (i == 0) {
-                path.moveTo(p.x-20, p.y-20);
+                path.moveTo(p.x-30, p.y-30);
             } else {
-                path.lineTo(p.x-20, p.y-20);
+                path.lineTo(p.x-30, p.y-30);
                 path.lineTo(p.x, p.y);
-                path.lineTo(p.x+20, p.y+20);
+                path.lineTo(p.x+30, p.y+30);
             }
         }
         path.close();
