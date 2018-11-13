@@ -35,8 +35,9 @@ public class CoordinateSystemUtils {
         path.moveTo(UnDeadBag.getInstance().ResourcesDensityData.getWidth() - 90,startY-10);
         path.lineTo(UnDeadBag.getInstance().ResourcesDensityData.getWidth() - 80, startY);
 
-        path.moveTo(UnDeadBag.getInstance().ResourcesDensityData.getWidth() - 900,startY+10);
+        path.moveTo(UnDeadBag.getInstance().ResourcesDensityData.getWidth() - 90,startY+10);
         path.lineTo(UnDeadBag.getInstance().ResourcesDensityData.getWidth() - 80, startY);
+        canvas.drawText("X",UnDeadBag.getInstance().ResourcesDensityData.getWidth() - 90,startY-paint.measureText("X")-15,paint);
         canvas.drawPath(path, paint);
     }
 
@@ -61,6 +62,16 @@ public class CoordinateSystemUtils {
             wordWidth = bluePaint.measureText(String.valueOf(startY+i*spaceY));
             canvas.drawText(String.valueOf(startY+i*spaceY), startX-wordWidth-10, startY+i*spaceY+wordHeight/4, bluePaint);
         }
+
+        path.moveTo(startX-10,UnDeadBag.getInstance().ResourcesDensityData.getHeight() - 90);
+        path.lineTo(startX, UnDeadBag.getInstance().ResourcesDensityData.getHeight() - 80);
+
+        path.moveTo(startX+10,UnDeadBag.getInstance().ResourcesDensityData.getHeight() - 90);
+        path.lineTo(startX, UnDeadBag.getInstance().ResourcesDensityData.getHeight() - 80);
+
+
+        canvas.drawText("Y",startX-paint.measureText("Y")-15,UnDeadBag.getInstance().ResourcesDensityData.getHeight() - 80,paint);
+
         canvas.drawPath(path, paint);
     }
 }
