@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="black">#050505</color>
     <color name="white">#ece6e6</color>
+    <color name="gray">#c1c1c1</color>
+    <color name="text_gray">#888888</color>
+    <color name="text_dark">#454545</color>
+    <color name="cursor_handle_color">#0d7aff</color>
+    <color name="selected_blue">#afe1f4</color>
 </resources>

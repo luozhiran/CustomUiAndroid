@@ -34,4 +34,5 @@ dependencies {
     compileOnly project(":control-lib")
     compileOnly project(":utils-lib")
     compileOnly project(":ui-utils-lib")
+    compileOnly project(":global-lib")
 }

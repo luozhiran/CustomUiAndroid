@@ -24,7 +24,13 @@
         <activity android:name=".uiactivity.OnlyHanziActivity" />
         <activity android:name=".uiactivity.OnlyPingyinActivity" />
         <activity android:name=".uiactivity.CustomPinYinAndHanziActivity" />
-        <activity android:name=".uiactivity.MeasureViewActivity"></activity>
+        <activity android:name=".uiactivity.MeasureViewActivity" />
+        <activity android:name=".uiactivity.TwinkleActivity" />
+        <activity android:name=".uiactivity.ProgressActivity" />
+        <activity android:name=".uiactivity.SelectTextViewWordActivity" />
+        <activity android:name=".uiactivity.WavActivity" />
+        <activity android:name=".uiactivity.ViewFlipperActivity" />
+        <activity android:name=".uiactivity.ScrollerActivity"></activity>
     </application>
 
 </manifest>

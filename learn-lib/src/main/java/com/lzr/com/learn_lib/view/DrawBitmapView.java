@@ -4,27 +4,38 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 
 import com.lzr.com.learn_lib.R;
 import com.lzr.com.learn_lib.view.base.BaseHandlerView;
 
-public class DrawBitmapView extends BaseHandlerView {
+public class DrawBitmapView extends View {
     private static final int ANIM_NULL = 0;         //动画状态-没有
     private static final int ANIM_CHECK = 1;        //动画状态-开启
     private static final int ANIM_UNCHECK = 2;      //动画状态-结束
-    private Bitmap mBitmap;
+
+    private Context mContext;           // 上下文
+    private int mWidth, mHeight;        // 宽高
+    private Handler mHandler;           // handler
+
     private Paint mPaint;
-    private int mWidth, mHeight;
-    private int mTotalPage = 13;
-    private int mCurrentPage = 1;
-    private int mAnimState;
-    private boolean isCheck;
-    private int mAnimDuration = 500;
+    private Paint paint;
+    private Bitmap mBitmap;
+
+    private int animCurrentPage = -1;       // 当前页码
+    private int animMaxPage = 13;           // 总页数
+    private int animDuration = 500;         // 动画时长
+    private int animState = ANIM_NULL;      // 动画状态
+
+    private boolean isCheck = false;        // 是否只选中状态
 
     public DrawBitmapView(Context context) {
         this(context, null);
@@ -32,22 +43,51 @@ public class DrawBitmapView extends BaseHandlerView {
 
     public DrawBitmapView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
-    private void init() {
-        mAnimState = ANIM_NULL;
-        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.checkmark);
+    //初始化
+    private void init(Context context) {
+        mContext = context;
+        paint = new Paint();
+        paint.setTextSize(30);
+        paint.setColor(Color.BLACK);
+
         mPaint = new Paint();
-        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setColor(0xffFF5317);
+        mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(true);
 
-    }
+        mBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.checkmark);
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (animCurrentPage < animMaxPage && animCurrentPage >= 0) {
+                    if (animState == ANIM_NULL) {
+                        return;
+                    }
+                    if (animState == ANIM_CHECK) {
+                        animCurrentPage++;
+                    } else if (animState == ANIM_UNCHECK) {
+                        animCurrentPage--;
+                    }
+                    invalidate();
+                    this.sendEmptyMessageDelayed(0, animDuration / animMaxPage);
+                    Log.e("AAA", "current=" + animCurrentPage);
+                } else {
+                    if (isCheck) {
+                        animCurrentPage = animMaxPage - 1;
+                    } else {
+                        animCurrentPage = -1;
+                    }
+                    requestLayout();
+                    invalidate();
+                    animState = ANIM_NULL;
+                }
+            }
+        };
     }
 
     @Override
@@ -58,58 +98,74 @@ public class DrawBitmapView extends BaseHandlerView {
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-    }
-
-    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        // 移动坐标系到画布中央
         canvas.translate(mWidth / 2, mHeight / 2);
-        canvas.drawCircle(mWidth / 2, mHeight / 2, 240, mPaint);
-        int slideHeight = mBitmap.getHeight();
-        Rect src = new Rect(slideHeight * mCurrentPage, 0, slideHeight * (mCurrentPage + 1), slideHeight);
+
+        // 绘制背景圆形
+        canvas.drawCircle(0, 0, 240, mPaint);
+
+        // 得出图像边长
+        int sideLength = mBitmap.getHeight();
+
+        // 得到图像选区 和 实际绘制位置
+        Rect src = new Rect(sideLength * animCurrentPage, 0, sideLength * (animCurrentPage + 1), sideLength);
         Rect dst = new Rect(-200, -200, 200, 200);
+
+        // 绘制
         canvas.drawBitmap(mBitmap, src, dst, null);
+        canvas.drawText("你好发顺丰弗拉飞机拉水电费拉萨的风景拉萨的风景阿斯顿浪费拉萨的风景",0,0,paint);
+
     }
 
+    /**
+     * 选择
+     */
     public void check() {
-        if (ANIM_NULL == mAnimState && !isCheck) {
-            isCheck = true;
-            mCurrentPage = 0;
-            mAnimState = ANIM_CHECK;
-            mHandler.sendEmptyMessageAtTime(1, mAnimDuration / mTotalPage);
+        if (animState != ANIM_NULL || isCheck) {
+            return;
         }
+        animState = ANIM_CHECK;
+        animCurrentPage = 0;
+        mHandler.sendEmptyMessageDelayed(0, animDuration / animMaxPage);
+        isCheck = true;
     }
 
+    /**
+     * 取消选择
+     */
     public void unCheck() {
-        if (ANIM_NULL == mAnimState && isCheck) {
-            isCheck = false;
-            mCurrentPage = mTotalPage - 1;
-            mAnimState = ANIM_UNCHECK;
-            mHandler.sendEmptyMessageAtTime(1, mAnimDuration / mTotalPage);
+        if (animState != ANIM_NULL || !isCheck) {
+            return;
         }
+        animState = ANIM_UNCHECK;
+        animCurrentPage = animMaxPage - 1;
+        mHandler.sendEmptyMessageDelayed(0, animDuration / animMaxPage);
+        isCheck = false;
     }
 
-    @Override
-    public void handleMessage(Message msg) {
-        if (mCurrentPage < mTotalPage && mCurrentPage >= 0) {
-            if (mAnimState == ANIM_NULL) return;
-            invalidate();
-            if (mAnimState == ANIM_CHECK) {
-                mCurrentPage++;
-            } else if (mAnimState == ANIM_UNCHECK) {
-                mCurrentPage--;
-            }
-            mHandler.sendEmptyMessageAtTime(1, mAnimDuration / mTotalPage);
-        } else {
-            if (isCheck) {
-                mCurrentPage = mTotalPage - 1;
-            } else {
-                mCurrentPage = 0;
-            }
-            invalidate();
-            mAnimState = ANIM_NULL;
-        }
+    /**
+     * 设置动画时长
+     *
+     * @param animDuration
+     */
+    public void setAnimDuration(int animDuration) {
+        if (animDuration <= 0)
+            return;
+        this.animDuration = animDuration;
     }
+
+
+    /**
+     * 设置背景圆形颜色
+     *
+     * @param color
+     */
+    public void setBackgroundColor(int color) {
+        mPaint.setColor(color);
+    }
+
+
 }

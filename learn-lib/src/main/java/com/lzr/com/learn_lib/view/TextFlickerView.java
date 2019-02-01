@@ -107,9 +107,7 @@ public class TextFlickerView extends View {
         mX1 = mSpace + mWidth / 2;
         mX2 = 2 * mSpace + 3 * mWidth / 2;
         mX3 = 3 * mSpace + mWidth * 2 + mWidth / 2;
-//        mLinearGradient = new LinearGradient(0, 0, mWidth, 0, Color.argb(255, 75, 75, 74), Color.argb(255, 142, 142, 142), Shader.TileMode.CLAMP);
         mLinearGradient = new LinearGradient(0, 0, mWidth, 0, Color.RED, Color.BLUE, Shader.TileMode.CLAMP);
-
         mPaint.setShader(mLinearGradient);
     }
 

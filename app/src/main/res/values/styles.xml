@@ -1,11 +1,33 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 想使用5.0的Activity过渡动画，就要加上这个，或者在代码里面设置 -->
+        <item name="android:windowContentTransitions">true</item>
+        <!--下面的内容要在5.0上才好用,启用转换过程都会更加流畅自然,指定进入和退出的动画可以重叠 -->
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+    </style>
+    <style name="ConstraintLayout_left_top_right_bottom_parent">
+        <item name="layout_constraintRight_toRightOf">parent</item>
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
     </style>
 
+
+    <style name="ConstraintLayout_left_right_parent">
+        <item name="layout_constraintRight_toRightOf">parent</item>
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+    </style>
+
+    <style name="ConstraintLayout_top_bottom_parent">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
 </resources>

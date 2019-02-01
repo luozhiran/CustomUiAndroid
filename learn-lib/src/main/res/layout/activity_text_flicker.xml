@@ -6,7 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".uiactivity.TextFlickerActivity">
 
-    <com.lzr.com.learn_lib.view.TextFlickerView
+    <!--<com.lzr.com.learn_lib.view.TextFlickerView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+
+    <com.lzr.com.learn_lib.view.LineFlickerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

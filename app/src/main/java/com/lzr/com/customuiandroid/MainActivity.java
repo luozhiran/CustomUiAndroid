@@ -2,10 +2,15 @@ package com.lzr.com.customuiandroid;
 
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.lzr.com.control_lib.HandlerActivity;
 import com.lzr.com.customuiandroid.adapter.LZAdapter;
@@ -17,6 +22,7 @@ public class MainActivity extends HandlerActivity {
     private RecyclerView mRecycle;
     private LZAdapter mLzAdapter;
     private LinearLayoutManager mLayoutManager;
+
 
     @Override
     public int getLayoutId() {
@@ -39,9 +45,13 @@ public class MainActivity extends HandlerActivity {
                     startActivity(intent);
                     break;
                 case "release-lib":
+//                    startActivity(new Intent(this,VideoPlayActivity.class));
+                    startActivity(new Intent(this,TestActivity.class));
                     break;
             }
         });
+//        mVideo.setVideoPath(Environment.getExternalStorageState()+"/.yqtec/ProxyBuffer/61mp4/AQJY/30.MP4");
+
     }
 
 

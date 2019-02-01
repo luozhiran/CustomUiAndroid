@@ -38,6 +38,7 @@ dependencies {
     compileOnly project(":control-lib")
     compileOnly project(":utils-lib")
     compileOnly project(":ui-utils-lib")
+    implementation project(":global-lib")
     compileOnly 'com.android.support:recyclerview-v7:27.1.1'
 
 }

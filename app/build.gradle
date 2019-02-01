@@ -20,6 +20,43 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    signingConfigs {
+        debug {
+            keyAlias 'yqclient.keystore'
+            keyPassword 'yuanqu2014()'
+            storeFile file('../yq.keystore')
+            storePassword 'yuanqu2014()'
+        }
+        relealse {
+            keyAlias 'yqclient.keystore'
+            keyPassword 'yuanqu2014()'
+            storeFile file('../yq.keystore')
+            storePassword 'yuanqu2014()'
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.relealse
+            zipAlignEnabled true
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (!variant.buildType.debuggable) {
+                String date = new Date().format("MMdd")
+                outputFileName = "test_v${variant.versionName}_${date}.apk"
+            }
+        }
+    }
 }
 
 dependencies {
@@ -34,6 +71,7 @@ dependencies {
     implementation project(":control-lib")
     implementation project(":utils-lib")
     implementation project(":ui-utils-lib")
-    implementation project(":localpre-lib")
+    implementation project(":global-lib")
+    implementation project(":service-lib")
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 }

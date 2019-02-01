@@ -1,0 +1,22 @@
+<resources>
+
+    <style name="ConstraintLayout_left_top_right_bottom_parent">
+        <item name="layout_constraintRight_toRightOf">parent</item>
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+
+    <style name="ConstraintLayout_left_right_parent">
+        <item name="layout_constraintRight_toRightOf">parent</item>
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+    </style>
+
+    <style name="ConstraintLayout_top_bottom_parent">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+
+</resources>

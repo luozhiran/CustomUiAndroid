@@ -23,12 +23,17 @@ import com.lzr.com.learn_lib.uiactivity.OnlyHanziActivity;
 import com.lzr.com.learn_lib.uiactivity.OnlyPingyinActivity;
 import com.lzr.com.learn_lib.uiactivity.PathMeasureActivity;
 import com.lzr.com.learn_lib.uiactivity.PinYinAndHanziActivity;
+import com.lzr.com.learn_lib.uiactivity.ProgressActivity;
 import com.lzr.com.learn_lib.uiactivity.RegionActivity;
 import com.lzr.com.learn_lib.uiactivity.RemoteControlMenuActivity;
+import com.lzr.com.learn_lib.uiactivity.ScrollerActivity;
+import com.lzr.com.learn_lib.uiactivity.SelectTextViewWordActivity;
 import com.lzr.com.learn_lib.uiactivity.TextActivity;
 import com.lzr.com.learn_lib.uiactivity.TextFlickerActivity;
 import com.lzr.com.learn_lib.uiactivity.TouchLineActivity;
 import com.lzr.com.learn_lib.uiactivity.RegionClickActivity;
+import com.lzr.com.learn_lib.uiactivity.ViewFlipperActivity;
+import com.lzr.com.learn_lib.uiactivity.WavActivity;
 import com.lzr.com.learn_lib.uiactivity.WordActivity;
 
 public class LearnMainActivity extends HandlerActivity {
@@ -61,7 +66,7 @@ public class LearnMainActivity extends HandlerActivity {
                     startActivity(intent);
                     break;
                 case "画布使用教程":
-                     intent = new Intent(this, DrawUseActivity.class);
+                    intent = new Intent(this, DrawUseActivity.class);
                     startActivity(intent);
                     break;
                 case "画图片":
@@ -136,6 +141,26 @@ public class LearnMainActivity extends HandlerActivity {
                     intent = new Intent(this, CustomPinYinAndHanziActivity.class);
                     startActivity(intent);
                     break;
+                case "进度条":
+                    intent = new Intent(this, ProgressActivity.class);
+                    startActivity(intent);
+                    break;
+                case "选择textview上的文字":
+                    intent = new Intent(this, SelectTextViewWordActivity.class);
+                    startActivity(intent);
+                    break;
+                case "声音检测波形":
+                    intent = new Intent(this, WavActivity.class);
+                    startActivity(intent);
+                    break;
+                case "上下滚动效果":
+                    intent = new Intent(this, ViewFlipperActivity.class);
+                    startActivity(intent);
+                    break;
+                case "滚动":
+                    intent = new Intent(this, ScrollerActivity.class);
+                    startActivity(intent);
+                    break;
 
             }
         });
@@ -164,6 +189,11 @@ public class LearnMainActivity extends HandlerActivity {
         mAdapter.addData("拼音排版");
         mAdapter.addData("文字带拼音(带声调)");
         mAdapter.addData("文字带拼音(自己画声调)");
+        mAdapter.addData("进度条");
+        mAdapter.addData("选择textview上的文字");
+        mAdapter.addData("声音检测波形");
+        mAdapter.addData("上下滚动效果");
+        mAdapter.addData("滚动");
         mAdapter.notifyDataSetChanged();
     }
 

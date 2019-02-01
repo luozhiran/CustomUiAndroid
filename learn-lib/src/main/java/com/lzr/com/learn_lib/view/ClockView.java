@@ -12,8 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lzr.com.ui_utils_lib.DensityData;
-import com.lzr.com.ui_utils_lib.UISizeUtils;
+
+import com.lzr.com.utils_lib.common.DensityData;
+import com.lzr.com.utils_lib.utils.UISizeUtils;
 
 public class ClockView extends View {
     private Paint mWhitePaint;

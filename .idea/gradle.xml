@@ -10,9 +10,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/control-lib" />
+            <option value="$PROJECT_DIR$/global-lib" />
             <option value="$PROJECT_DIR$/learn-lib" />
-            <option value="$PROJECT_DIR$/localpre-lib" />
             <option value="$PROJECT_DIR$/release-lib" />
+            <option value="$PROJECT_DIR$/service-lib" />
             <option value="$PROJECT_DIR$/ui-utils-lib" />
             <option value="$PROJECT_DIR$/utils-lib" />
           </set>

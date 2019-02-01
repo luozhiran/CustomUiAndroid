@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -324,7 +325,7 @@ public class WordView extends View {
                     path.moveTo(rect.centerX(), rect.centerY());
                     lastPoint.set(rect.centerX(), rect.centerY());
                 } else {
-                    if (j % 12 == 0) {
+               /*     if (j % 12 == 0) {
                         Point p = points.get(j);
                         p = scalePoint(p);
                         Point nextP = points.get(j + 1);
@@ -334,7 +335,19 @@ public class WordView extends View {
                         path.lineTo(lastPoint.x, lastPoint.y);
                         path.lineTo(rect.centerX(), rect.centerY());
                         lastPoint.set(rect.centerX(), rect.centerY());
-                    }
+                    }*/
+
+
+                        Point p = points.get(j);
+                        p = scalePoint(p);
+                        Point nextP = points.get(j);
+                        nextP = scalePoint(nextP);
+                        Rect rect = new Rect(p.x, p.y, nextP.x, nextP.y);
+//                       path.quadTo(lastPoint.x,lastPoint.y,rect.centerX(),rect.centerY());
+                        path.lineTo(lastPoint.x, lastPoint.y);
+                        path.lineTo(rect.centerX(), rect.centerY());
+                        lastPoint.set(rect.centerX(), rect.centerY());
+
                 }
             }
         }
@@ -407,7 +420,7 @@ public class WordView extends View {
 
     private void readWordData() {
         try {
-            String assetsName = WordUtils.urlEncode('伟');
+            String assetsName = WordUtils.urlEncode('黑');
             String jsonData = WordUtils.readJsonFromAssets(getContext(), assetsName);
             if (TextUtils.isEmpty(jsonData)) {
                 setVisibility(View.GONE);
